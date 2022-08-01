@@ -1,0 +1,33 @@
+일단 cllaborators 설정필요
+------공통----------
+깃 설치 -> 깃 bash 실행(리눅스 명령어와 같음)
+mkdir 디렉터리이름
+cd 디렉터리이름
+git init-> 깃 자신의 저장소 설정
+git config --global user.email " " -> 이름설정
+git config --global user.name " " -> 이름설정
+------팀장-----------------------------------------------------
+git remote add origin https://github.com/s2hoon/ptcd.git -> 깃허브 와 자신 저장소 연결
+git remote -v -> 연결됬는지 확인
+파일작성
+git add .   -> 스테이징(버퍼링같은느낌) 시키기 모든파일
+git commit -m "update overview"  -> 커밋(업로드) 시키기
+git push -u origin master -> 처음에만 이렇게 push, 다음부턴 git push
+------팀원-------------------------------------------------------
+git config --global user.email " " -> 이름설정
+git config --global user.name " " -> 이름설정
+git clone https://github.com/s2hoon/ptcd.git : 원격저장소에 있는 디렉터리(안에있는파일들 모두 포함) 다운받기
+cd ptcd : 다운받은 ptcd 디렉터리로 이동
+git checkout -b f  : 자신만의 f 버전 (branch) 만들고 , 버전 이동 
+파일 작성 및 수정
+git add .  : 스테이징(버퍼링같은느낌) 시키기 모든파일
+git commit -m "update overview" : 커밋 시키기
+git push -u origin f   : 자신만의 버전(branch) push하기
+============================================
+git status -> 파일상태확인 
+git log -> 버전기록 보기
+git log -p
+git log --all --graph --oneline -> 그래프버전
+git remote -v  ->원격저장소 연결 확인
+git log --oneline --branches --graph  ->아래에서 위로 branch
+git pull origin master -> 업데이트시키기
