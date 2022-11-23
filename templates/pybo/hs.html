@@ -1,0 +1,29 @@
+{% extends 'pybo/base.html'%}
+{% block content %}
+<body class="text-center">
+    <main class="form-signin w-100 m-auto">
+      <form method="GET" action="{% url 'pybo:hs' %}">
+        <h2>누진세 예측</h2>
+        이번달 전기사용량을 입력하세요<br>
+        <input type="number" min="0" name="powerusage" >
+        <input type="submit"  value="전기요금 예측">
+      </form>
+      이번달 하계 전기요금은 {{summer_cost}} 입니다<br>
+      이번달 기타 계절 전기요금은 {{other_cost}} 입니다<br><br><br>
+      <h2>평균 전력 사용량</h2>
+      <form method="GET" action="{% url 'pybo:hs2' %}">
+      년(ex : 2022)  
+      <input type="number" min="2015" name="year" ><br>
+      월(ex :   02)
+      <input type="number" name="month" ><br>
+      도시(ex : 대구광역시)
+      <input type="text" name="city" ><br>
+      시군구(ex :   수성구)
+      <input type="text" name="gu" ><br>
+      <input type="submit" value="전기요금 예측">
+      </form>
+        평균 전력 사용량 : {{powerusage}}<br>
+        누진세 : {{season}} {{level}} 단계
+    </main>
+</body>
+{% endblock %}

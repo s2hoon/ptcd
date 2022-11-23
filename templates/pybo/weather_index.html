@@ -1,0 +1,420 @@
+{% extends 'pybo/base.html'%}
+{% block content %} 
+
+<!--{% load static %} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+
+    <script>
+        moveScrollLeft = function() {
+        var _scrollX = $('.scrollbar').scrollLeft();
+        $('.scrollbar').scrollLeft(_scrollX + 600);
+        };
+        moveScrollRight = function() {
+            var _scrollX = $('.scrollbar').scrollLeft();
+        $('.scrollbar').scrollLeft(_scrollX - 600);
+        };
+        window.onload = function() 
+        {
+        setTimeout(() => {
+            document.querySelector('.comment p').innerHTML = "{{word2}}";
+            setTimeout(() => {
+                document.querySelector('.comment p').innerHTML = "{{word}}";
+                setTimeout(() => {
+                    document.querySelector('.comment p').innerHTML = "{{word2}}";
+                    
+                }, 3000)    
+            }, 3000)
+        }, 3000);
+    }
+
+    </script>
+    <title>How's The Weather</title>
+    <style>
+        html {
+            scroll-behavior: smooth; 
+        }
+        body { 
+            text-align: center;
+            background-color: #6180dd;
+            color:#ffffff
+            
+        }
+        img {
+            width: 40px;
+            height: 40px;
+        }
+        #now {
+            margin : 100px auto;   
+        }
+
+        div {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .select{
+            color: rgb(182, 182, 182);
+            text-decoration: none
+        }
+        /*마우스 클릭하고있을때*/
+        .select:active {
+            color: #000;
+
+        }
+        .scrollbar-unit {
+            display: inline-block;
+            margin: 10px;
+        }   
+    
+        .bar  {
+            margin:0 auto; /*스크롤바 가운데 정렬*/
+            max-width: 998px; 
+        }
+        .scrollbar {
+            /*가로 스크롤*/
+            overflow-x:auto; 
+            white-space:nowrap;
+
+        }
+        .scrollbar::-webkit-scrollbar {
+            width: 10px;
+            
+        }
+        .scrollbar::-webkit-scrollbar-track {
+            background-color: #eee;
+            background: #6180dd;
+        }
+        .scrollbar::-webkit-scrollbar-thumb {
+            width: 10px;
+            background: linear-gradient(#eee, #64b3f4);
+        }
+        .scrollbar::-webkit-scrollbar-button{
+            width: 20px;
+            height: 20px;
+        }
+        .scrollbar::-webkit-scrollbar-button:start {
+            background-color: #4263b7;
+            border-radius: 10px 0px 0px 10px;
+
+        }
+        .scrollbar::-webkit-scrollbar-button:end {
+            background-color: #4263b7;
+            border-radius: 0px 10px 10px 0px;
+        }
+        .week-unit{
+            height: 50px;
+        }
+
+    </style>
+</head>
+<body>
+    
+
+
+    <div id = "now">
+        <img src = "{% static 'image/location.gif' %}" alt="location" style = "width: 15px; height: 15px">
+        {{curr_weather.loc}}
+    
+        <div style = "font-size: 5em">
+            <span>
+                {{curr_weather.tmp}}°
+            </span>
+            <span>
+                <!--날씨 이미지 표시-->
+                <!--강수형태(PTY)에 따라 날씨 이미지 다르게 설정-->
+                {% if curr_weather.pty == '1' %}
+                    <img src = "{% static 'image/raining.png' %}" alt="비">
+                {% elif curr_weather.pty == '2' %}
+                    <img src = "{% static 'image/sleeting.png' %}" alt="비/눈">
+                {% elif curr_weather.pty == '3' %}
+                    <img src = "{% static 'image/snowing.png' %}" alt="눈">
+                {% elif curr_weather.pty == '4' %}
+                    <img src = "{% static 'image/raining.png' %}" alt="빗방울">
+                {% elif curr_weather.pty == '5' %}
+                    <img src = "{% static 'image/sleeting.png' %}" alt="빗방울/눈날림">
+                {% elif curr_weather.pty == '6' %}
+                    <img src = "{% static 'image/snowing.png' %}" alt="눈날림">
+
+                <!--하늘상태(SKY)에 따라 날씨 이미지 다르게 설정-->
+                {% elif curr_weather.sky == '1' %}
+                    {% if time >= 18 or 6 > time %} <!--낮과 밤에 따라 이미지 다르게 설정-->
+                        <img src = "{% static 'image/moon.png' %}" alt = "맑음">
+                    {% else %}
+                        <img src = "{% static 'image/sun.png' %}" alt = "맑음">
+                    {% endif %}
+                {% elif curr_weather.sky == '3' %}
+                    {% if time >= 18 or 6 > time %}
+                        <img src = "{% static 'image/cloudy-night.png' %}" alt = "구름많음">
+                    {% else %}
+                        <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음">
+                    {% endif %}
+                {% elif curr_weather.sky == '4' %}
+                    <img src = "{% static 'image/cloud.png' %}" alt = "흐림">
+                {% endif %}
+            </span>
+            
+        </div>
+        <div>
+            습도: {{curr_weather.hum}}% &nbsp;&nbsp;&nbsp;&nbsp;자외선: {{curr_weather.sun}}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;동파가능지수: {{curr_weather.cold}} 
+        </div>
+        <div>
+            {{tmn}} / {{tmx}} °C
+        </div>
+        <div class = "comment" title = "어제의 기온과 비교하는 글과 특정온도를 넘을시 냉난방에 주의하라는 문구가 반복해서 출력" style  = "background-color: #4263b7; max-width: 998px; margin:0 auto; border-radius: 10px;">
+            <p>{{word}}</p>
+            <!-- {{word2}} -->
+        </div>
+    </div>
+    
+    <div>
+        <h1>기온 및 날씨</h1>
+        <div>
+            <span style = "margin: 0px 5px; "></span>
+            <span class="select" id="day1_select" >오늘</span>
+            <span>.</span>
+            <span class="select" id="day2_select">내일</span>
+            <span>.</span>
+            <span class="select" id="day3_select">모레</span>
+            <span></span>
+        </div>
+    </div>
+    <!-- 오늘 날씨 -->
+    <div class = "bar" id = "day1_print">
+        <div class = "scrollbar">
+            {% for k, v in day1.items %}
+                <div class = "scrollbar-unit">
+                    <th>{{k}}시</th><br>
+                    <td>
+                        <span>
+                            <!--날씨 이미지 표시-->
+                            <!--강수형태(PTY)에 따라 날씨 이미지 다르게 설정-->
+                            {% if v.pty == '1' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="비">
+                            {% elif v.pty == '2' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="비/눈">
+                            {% elif v.pty == '3' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈">
+                            {% elif v.pty == '4' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="빗방울">
+                            {% elif v.pty == '5' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="빗방울/눈날림">
+                            {% elif v.pty == '6' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈날림">
+            
+                            <!--하늘상태(SKY)에 따라 날씨 이미지 다르게 설정-->
+                            {% elif v.sky == '1' %}
+                                {% if k >= 18 or 6 > k %} <!--낮과 밤에 따라 이미지 다르게 설정-->
+                                    <img src = "{% static 'image/moon.png' %}" alt = "맑음">
+                                {% else %}
+                                    <img src = "{% static 'image/sun.png' %}" alt = "맑음">
+                                {% endif %}
+                            {% elif v.sky == '3' %}
+                                {% if k >= 18 or 6 > k %}
+                                    <img src = "{% static 'image/cloudy-night.png' %}" alt = "구름많음">
+                                {% else %}
+                                    <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음">
+                                {% endif %}
+                            {% elif v.sky == '4' %}
+                                <img src = "{% static 'image/cloud.png' %}" alt = "흐림">
+                            {% endif %}
+                        </span>
+                    </td><br>
+                    <td>{{v.tmp}}°</td><br>
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
+    <!-- 내일 날씨 -->
+    <div class = "bar" id = "day2_print">
+        <div class = "scrollbar">
+            {% for k, v in day2.items %}
+                <div class = "scrollbar-unit">
+                    <th>{{k}}시</th><br>
+                    <td>
+                        <span>
+                            <!--날씨 이미지 표시-->
+                            <!--강수형태(PTY)에 따라 날씨 이미지 다르게 설정-->
+                            {% if v.pty == '1' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="비">
+                            {% elif v.pty == '2' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="비/눈">
+                            {% elif v.pty == '3' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈">
+                            {% elif v.pty == '4' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="빗방울">
+                            {% elif v.pty == '5' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="빗방울/눈날림">
+                            {% elif v.pty == '6' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈날림">
+            
+                            <!--하늘상태(SKY)에 따라 날씨 이미지 다르게 설정-->
+                            {% elif v.sky == '1' %}
+                                {% if k >= 18 or 6 > k %} <!--낮과 밤에 따라 이미지 다르게 설정-->
+                                    <img src = "{% static 'image/moon.png' %}" alt = "맑음">
+                                {% else %}
+                                    <img src = "{% static 'image/sun.png' %}" alt = "맑음">
+                                {% endif %}
+                            {% elif v.sky == '3' %}
+                                {% if k >= 18 or 6 > k %}
+                                    <img src = "{% static 'image/cloudy-night.png' %}" alt = "구름많음">
+                                {% else %}
+                                    <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음">
+                                {% endif %}
+                            {% elif v.sky == '4' %}
+                                <img src = "{% static 'image/cloud.png' %}" alt = "흐림">
+                            {% endif %}
+                        </span>
+                    </td><br>
+                    <td>{{v.tmp}}°</td><br>
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
+    <!-- 모레 날씨 -->
+    <div class = "bar" id = "day3_print">
+        <div class = "scrollbar">
+            {% for k, v in day3.items %}
+                <div class = "scrollbar-unit">
+                    <th>{{k}}시</th><br>
+                    <td>
+                        <span>
+                            <!--날씨 이미지 표시-->
+                            <!--강수형태(PTY)에 따라 날씨 이미지 다르게 설정-->
+                            {% if v.pty == '1' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="비">
+                            {% elif v.pty == '2' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="비/눈">
+                            {% elif v.pty == '3' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈">
+                            {% elif v.pty == '4' %}
+                                <img src = "{% static 'image/raining.png' %}" alt="빗방울">
+                            {% elif v.pty == '5' %}
+                                <img src = "{% static 'image/sleeting.png' %}" alt="빗방울/눈날림">
+                            {% elif v.pty == '6' %}
+                                <img src = "{% static 'image/snowing.png' %}" alt="눈날림">
+            
+                            <!--하늘상태(SKY)에 따라 날씨 이미지 다르게 설정-->
+                            {% elif v.sky == '1' %}
+                                {% if k >= 18 or 6 > k %} <!--낮과 밤에 따라 이미지 다르게 설정-->
+                                    <img src = "{% static 'image/moon.png' %}" alt = "맑음">
+                                {% else %}
+                                    <img src = "{% static 'image/sun.png' %}" alt = "맑음">
+                                {% endif %}
+                            {% elif v.sky == '3' %}
+                                {% if k >= 18 or 6 > k %}
+                                    <img src = "{% static 'image/cloudy-night.png' %}" alt = "구름많음">
+                                {% else %}
+                                    <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음">
+                                {% endif %}
+                            {% elif v.sky == '4' %}
+                                <img src = "{% static 'image/cloud.png' %}" alt = "흐림">
+                            {% endif %}
+                        </span>
+                    </td><br>
+                    <td>{{v.tmp}}°</td><br>
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
+    <script>
+        //첫화면은 'day1_print'(오늘)만 출력되도록 설정
+        document.getElementById('day1_print').style.display = "block";  //출력
+        document.getElementById('day2_print').style.display = "none";   //숨김
+        document.getElementById('day3_print').style.display = "none";   //숨김
+       // 클릭이벤트
+        $('#day1_select').click(function() {    //'오늘' 클릭
+            $("#day1_select").css("color","rgb(66,99,183)");
+            $("#day2_select").css("color","rgb(182, 182, 182)");
+            $("#day3_select").css("color","rgb(182, 182, 182)");
+            $("#day1_print").show();
+            $("#day2_print").hide();
+            $("#day3_print").hide();
+         
+        })
+         
+        $('#day2_select').click(function() {    //'내일' 
+            $("#day1_select").css("color","rgb(182, 182, 182)");
+            $("#day2_select").css("color","rgb(66,99,183)");
+            $("#day3_select").css("color","rgb(182, 182, 182)");
+            $("#day1_print").hide();
+            $("#day2_print").show();
+            $("#day3_print").hide();
+            
+        })
+        $('#day3_select').click(function() {    //'모레' 
+            $("#day1_select").css("color","rgb(182, 182, 182)");
+            $("#day2_select").css("color","rgb(182, 182, 182)");
+            $("#day3_select").css("color","rgb(66,99,183)");
+            $("#day1_print").hide();
+            $("#day2_print").hide();
+            $("#day3_print").show();
+
+         
+        })
+    </script>
+    <!--스크롤 버튼-->
+    <!-- <div>
+        <button onclick="moveScrollRight()" style = "width:50px; height:50px; border-radius: 30px; border: none;"></button>
+        <button onclick="moveScrollLeft() "style = "width:50px; height:50px; border-radius: 30px; border: none;"></button>
+        
+    </div> -->
+
+    <div style = "margin-top:100px">
+        <h1>주간 날씨</h1>
+    </div>
+    <div class = "bar">
+        {% for k, v in week.items %}
+        <div class = "week-unit">
+            <table width = "998px" height = "50px">
+                <td width = "100px;">{{k}} &nbsp;&nbsp;{{v.day}}</td>
+                <td width = "100px;">
+                    {% if v.skyAm == "맑음" %}
+                        <img src = "{% static 'image/sun.png' %}" alt = "맑음" width = "50px" height = "50px">
+                    {% elif v.skyAm == "구름많음" %}
+                        <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음" width = "50px" height = "50px">
+                    {% elif v.skyAm == "흐림" %}
+                        <img src = "{% static 'image/cloud.png' %}" alt = "흐림" width = "50px" height = "50px">
+                    {% elif v.skyAm == "구름많고 비" or v.skyAm == "구름많고 소나기" or v.skyAm == "흐리고 비" or v.skyAm == "흐리고 소나기" or v.skyAm == "소나기" %}
+                        <img src = "{% static 'image/raining.png' %}" alt = "비" width = "50px" height = "50px"><p style = "display:inline; font-size: 10px;">{{v.rainAm}}%</p>
+                    {% elif v.skyAm == "구름많고 눈" or v.skyAm == "흐리고 눈" or v.skyAm == "구름많고 소나기" %}
+                        <img src = "{% static 'image/snowing.png' %}" alt = "눈" width = "50px" height = "50px">
+                    {% elif v.skyAm == "구름많고 비/눈" or v.skyAm == "흐리고 비/눈" %}
+                        <img src = "{% static 'image/sleeting.png' %}" alt = "비/눈" width = "50px" height = "50px">
+                    
+                    {% endif %}
+                </td>
+                <td width = "100px;">
+                    {% if v.skyPm == "맑음" %}
+                        <img src = "{% static 'image/sun.png' %}" alt = "맑음" width = "50px" height = "50px">
+                    {% elif v.skyPm == "구름많음" %}
+                        <img src = "{% static 'image/cloudy-day.png' %}" alt = "구름많음" width = "50px" height = "50px">
+                    {% elif v.skyPm == "흐림" %}
+                        <img src = "{% static 'image/cloud.png' %}" alt = "흐림" width = "50px" height = "50px">
+                    {% elif v.skyPm == "구름많고 비" or v.skyPm == "구름많고 소나기" or v.skyPm == "흐리고 비" or v.skyPm == "흐리고 소나기" or v.skyPm == "소나기" %}
+                        <img src = "{% static 'image/raining.png' %}" alt = "비" width = "50px" height = "50px"><p style = "display:inline; font-size: 10px;">{{v.rainPm}}%</p>
+                    {% elif v.skyPm == "구름많고 눈" or v.skyPm == "흐리고 눈" or v.skyPm == "구름많고 소나기" %}
+                        <img src = "{% static 'image/snowing.png' %}" alt = "눈" width = "50px" height = "50px">
+                    {% elif v.skyPm == "구름많고 비/눈" or v.skyPm == "흐리고 비/눈" %}
+                        <img src = "{% static 'image/sleeting.png' %}" alt = "비/눈" width = "50px" height = "50px">
+                    
+                    {% endif %}
+                </td>
+                <td width = "598px;">
+                    
+                    {{v.skyAm}} | {{v.skyPm}}
+                </td>
+                <td width = "100px;">{{v.min}}°/{{v.max}}°</td>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+ 
+</body>
+</html>
+{% endblock %}

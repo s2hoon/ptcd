@@ -1,0 +1,223 @@
+{% extends 'pybo/base.html'%}
+{% block content %}  
+<body class="text-center">
+  <main class="form-signin w-100 m-auto">
+    <form method="POST" action="{% url 'pybo:kakaomap' %}">
+      {% csrf_token %}
+      <h1 class="h3 mb-3 fw-normal">전기차 충전소</h1>
+      <select id="s1" type="text" name="drop1" onchange="optionChange();">
+        <option value="서울특별시">서울특별시</option>
+        <option value="부산광역시">부산광역시</option>
+        <option value="대구광역시">대구광역시</option>
+        <option value="인천광역시">인천광역시</option>
+        <option value="광주광역시">광주광역시</option>
+        <option value="대전광역시">대전광역시</option>
+        <option value="울산광역시">울산광역시</option>
+        <option value="경기도">경기도</option>
+        <option value="강원도">강원도</option>
+        <option value="충청북도">충청북도</option>
+        <option value="충청남도">충청남도</option>
+        <option value="전라북도">전라북도</option>
+        <option value="전라남도">전라남도</option>
+        <option value="경상북도">경상북도</option>
+        <option value="경상남도">경상남도</option>
+        <option value="제주특별자치도">제주특별자치도</option>
+        <option value="세종특별자치시">세종특별자치시</option>
+      </select>
+      <select id="s2" type="text" name="drop2">
+        <option value="중랑구">중랑구</option>
+        <option value="중구">중구</option>
+        <option value="용산구">용산구</option>
+        <option value="성동구">성동구</option>
+        <option value="동대문구">동대문구</option>
+        <option value="성북구">성북구</option>
+        <option value="도봉구">도봉구</option>
+        <option value="은평구">은평구</option>
+        <option value="서대문구">서대문구</option>
+        <option value="마포구">마포구</option>
+        <option value="강서구">강서구</option>
+        <option value="구로구">구로구</option>
+        <option value="영등포구">영등포구</option>
+        <option value="동작구">동작구</option>
+        <option value="관악구">관악구</option>
+        <option value="강남구">강남구</option>
+        <option value="강동구">강동구</option>
+        <option value="송파구">송파구</option>
+        <option value="중랑구">중랑구</option>
+        <option value="노원구">노원구</option>
+        <option value="서초구">서초구</option>
+        <option value="양천구">양천구</option>
+        <option value="광진구">광진구</option>
+        <option value="강북구">강북구</option>
+        <option value="금천구">금천구</option>
+        <option value="미분류">미분류</option>
+
+      </select>
+      <input type="submit" id="search" value="검색">
+    </form>
+    
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      function optionChange() {
+        var a = ['종로구','중구','용산구','성동구','동대문구','성북구','도봉구',
+'은평구','서대문구','마포구','강서구','구로구','영등포구','동작구',
+'관악구','강남구','강동구','송파구','중랑구','노원구','서초구','양천구','광진구',
+'강북구','금천구','미분류'];
+        var b = ['중구','서구','동구','영도구','부산진구','동래구','남구','북구','해운대구',
+      '사하구','금정구','강서구','연제구','수영구','사상구','기장군','미분류'];
+        var v = $( '#s1' ).val();
+        var o;
+        if ( v == '서울특별시' ) {
+          o = a;
+        } else if ( v == '부산광역시' ) {
+          o = b;
+        } else if ( v == '대구광역시' ) {
+          o = b;
+        } else if ( v == '인천광역시' ) {
+          o = b;
+        } else if ( v == '광주광역시' ) {
+          o = b;
+        } else if ( v == '부산광역시' ) {
+          o = b;
+        } else if ( v == '대전광역시' ) {
+          o = b;
+        } else if ( v == '울산광역시' ) {
+          o = b;
+        }else if ( v == '경기도' ) {
+          o = b;
+        }else if ( v == '강원도' ) {
+          o = b;
+        }else if ( v == '충청북도' ) {
+          o = b;
+        }else if ( v == '전라북도' ) {
+          o = b;
+        }else if ( v == '전라남도' ) {
+          o = b;
+        }else if ( v == '경상북도' ) {
+          o = b;
+        }else if ( v == '경상남도' ) {
+          o = b;
+        }else if ( v == '울산광역시' ) {
+          o = b;
+        }else if ( v == '제주특별자치도' ) {
+          o = b;
+        }else if ( v == '세종특별자치시' ) {
+          o = b;
+        }
+        $( '#s2' ).empty();
+        $( '#s2' ).append( '<option></option>' );
+        for ( var i = 0; i < o.length; i++ ) {
+          $( '#s2' ).append( '<option>' + o[ i ] + '</option>' );
+        }
+      }
+    </script>
+
+
+    <button type="button" id="btn">내위치</button>
+    <div id="map" style="width:500px;height:400px;margin:0 auto;"></div>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d1c459260bdd401d379281b2c214f7c"></script>
+    <script>
+      //버튼 이벤트
+      document.getElementById("btn").addEventListener('click', search_myplace);
+      //setTimeout(search_myplace, 0); 
+      document.getElementById("search").addEventListener('click', search_charger);
+      setTimeout(search_charger, 0);
+
+      //내주변 자동검색을 눌렀을때 실행되는함수
+      function search_myplace() {
+       
+        //지도표시
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+          mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 5 // 지도의 확대 레벨 
+          };
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+        if (navigator.geolocation) {
+          // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude, // 위도
+              lon = position.coords.longitude; // 경도
+            var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+              message = '<div style="padding:1px;">내위치</div>'; // 인포윈도우에 표시될 내용입니다
+            // 마커와 인포윈도우를 표시합니다
+            displayMarker(locPosition, message);
+          });
+          // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+          function displayMarker(locPosition, message) {
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+              map: map,
+              position: locPosition
+            });
+            var iwContent = message, // 인포윈도우에 표시할 내용
+              iwRemoveable = true;
+            // 인포윈도우를 생성합니다
+            var infowindow = new kakao.maps.InfoWindow({
+              content: iwContent,
+              removable: iwRemoveable
+            });
+            // 인포윈도우를 마커위에 표시합니다 
+            infowindow.open(map, marker);
+            // 지도 중심좌표를 접속위치로 변경합니다
+            map.setCenter(locPosition);
+          }
+        }
+        event.preventDefault();
+      }
+
+      //submit 눌렀을때 실행되는 함수
+      function search_charger() {
+        
+        //charger_information들을 가져옴
+        var charger_information = JSON.parse("{{charger_information|escapejs}}")
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+          mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 5 // 지도의 확대 레벨 
+          };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var locPosition = new kakao.maps.LatLng(charger_information['coordinate'][0][0], charger_information['coordinate'][0][1]), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+          message = '<div style="padding:1px;">검색한충전소위치</div>'; // 인포윈도우에 표시될 내용입니다
+
+        // 마커와 인포윈도우를 표시합니다
+        displayMarker(locPosition, message);
+
+
+        function displayMarker(locPosition, message) {
+
+          // 마커를 생성합니다
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: locPosition
+          });
+
+          var iwContent = message, // 인포윈도우에 표시할 내용
+            iwRemoveable = true;
+
+          // 인포윈도우를 생성합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable
+          });
+
+          // 인포윈도우를 마커위에 표시합니다 
+          infowindow.open(map, marker);
+
+          // 지도 중심좌표를 접속위치로 변경합니다
+          map.setCenter(locPosition);
+        }
+        event.preventDefault();
+      }
+
+
+    </script>
+    <p class="mt-5 mb-3 text-muted">내위치 : {{address}} </p>
+  </main>
+  </body>
+
+{% endblock %}

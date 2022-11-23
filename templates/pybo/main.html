@@ -1,0 +1,60 @@
+{% extends 'pybo/base.html'%}
+{% block content %}  
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'predicted', 'Expected'],
+          ['1월',  251.935,      252],
+          ['2월',  240.951,      239],
+          ['3월',  207.943,       207],
+          ['4월',  211.947,      211],
+          ['5월',  199.950,      198],
+          ['6월',  209.943,      208],
+          ['7월',  246.936,       244],
+          ['8월',  326.917,      324],
+          ['9월',  256.9,      255],
+          ['10월',  214.893,      213],
+          ['11월',  212.886,       211],
+          ['12월',  220.880,      219]
+        ]);
+
+        var options = {
+          title: '2022년 월별 가구 평균 전기 사용량 예측',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+
+<body>
+
+  
+</nav>
+
+    <a href="{% url 'pybo:sj'%}"><button type="button" class="btn btn-dark btn-lg"  >DATA</button></a>
+  
+    <div class = "center">
+    <div id="curve_chart" style="width: 1300px; height: 500px">
+    </div>
+ 
+
+</div>
+
+  <div class="card-body text-center">
+      [단위: kWh] <br>
+     위 그래프는 2022년도 가구 평균 전력 사용 예측량을 월별로 나타낸 것입니다. <br>
+      2014년~2021년도 총 96개월치 서울 대구 인천 제주 부산 총 5개 도시의 월별 전력 사용량 데이터를 추출하여  <br>
+      2022년도 월별 가구 평균 전력 사용량을 예측하였습니다.
+  </div>
+ </body>
+
+{% endblock %}

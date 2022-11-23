@@ -1,0 +1,44 @@
+{% extends 'pybo/base.html'%}
+{% block content %}    
+
+    <div class="row align-items-md-stretch">
+      <div class="col-md-4">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>전기차 충전소</h2>
+          <p>검색한 주소 주변의 전기차 충전소를 지도에 표시해주는 기능</p>
+          <a href="{% url 'pybo:kakaomap'%}"><button class="btn btn-primary btn-lg" type="button">알아보기</button></a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="h-100 p-5 text-bg-dark rounded-3">
+          <h2>2022년 전기 사용량 예측 그래프</h2>
+          <p>서울 대구 인천 제주 부산 총 5개 도시의 월별 평균 가구 전력 사용량 데이터를 통해 2022년도 월별 가구 평균 전력 사용량을 예측하였습니다</p>
+          <a href="{% url 'pybo:sj2'%}"><button class="btn btn-primary btn-lg" type="button">알아보기</button></a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>태양광 발전 프로젝트</h2>
+          <p>태양광 발전 프로젝트의 수익성을 분석하여 SMP, REC에 따른 투자회수기간 계산 기능 및
+            태양광 자원 지도를 영상으로 볼 수 있는 기능</p>
+          <a href="{% url 'pybo:pj'%}"><button class="btn btn-primary btn-lg" type="button">알아보기</button></a>
+        </div>
+      </div>
+    <div class="row align-items-md-stretch">
+      <div class="col-md-6">
+        <div class="h-100 p-5 text-bg-dark rounded-3">
+          <h2>누진세 확인</h2>
+          <p>사용자가 전력 소비량을 입력해 누진세를 구간을 확인하고 거주하는 지역의 평균 전력 소비량과 비교할 수 있는 기능</p>
+          <a href="{% url 'pybo:hs'%}"><button class="btn btn-primary btn-lg" type="button">알아보기</button></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>날씨</h2>
+          <p>사용자가 날씨를 확인 할 수 있도록 10일이내의 날씨를 제공하는 기능 </p>
+          <a href="{% url 'pybo:weather'%}"><button class="btn btn-primary btn-lg" type="button">알아보기</button></a>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
