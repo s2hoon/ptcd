@@ -286,7 +286,7 @@ def getVilageFsct(nx, ny):
     w = '' #문구
     if m == '6' or m == '7' or m == '8':
         if t_tmx >= 21.0:
-            w = '(21°↑)과도한 냉방사용에 주의하세요'
+            w = '(21°↑)↓과도한 냉방사용에 주의하세요'
     elif m == '11' or m == '12' or m == '1' or m == '2':
         if t_tmn <= 10.0:
             w = '(10°↓)과도한 난방사용에 주의하세요'
@@ -310,7 +310,7 @@ def getUltraSrtFcst(nx, ny):
     yesterday = y.strftime("%Y%m%d")
     #print(today)
     #print(yesterday)
-    pre_hour = 0
+
     #base_time와 base_date를 구하는 함수
     if now.minute < 45:
             if now.hour == 0:
@@ -329,7 +329,7 @@ def getUltraSrtFcst(nx, ny):
         else:
             base_time = str(now.hour) + "30"
         base_date = today
-    print(f'now.hour: {now.hour}')
+
     print(f'base_date: {base_date}/ base_time:{base_time}')
 
 
@@ -348,7 +348,7 @@ def getUltraSrtFcst(nx, ny):
             desired_time = str(now.hour + 1) + "00"
     if len(desired_time) < 4: 
         desired_time = "0" + desired_time
-    # print(f'desired_time: {desired_time}')
+    print(f'desired_time: {desired_time}')
 
     #오늘의 날씨 
     queryParams = '?' + urlencode(
@@ -421,15 +421,16 @@ def getUltraSrtFcst(nx, ny):
         quote_plus("time"): time,  
         quote_plus("dataType"): "JSON",                       
         })
+        # print(url + queryParams)
         #오늘 값 요청 (웹 블우저 서버에서 요청 - url주소와 파라미터)
         res = requests.get(url + queryParams, verify=False) # verify=False이거 안 넣으면 에러남ㅜㅜ
         items = res.json().get('response').get('body').get('items') #데이터들 아이템에 json 형태로 저장
 
         sun = ''
         for item in items['item']:
-            if h==0 or h%3==0:
+            if m==0 or m%2==0:
                 s = item['h0']
-            elif h%2 ==0:
+            elif m%2 ==0:
                 s = item['h3']
             else:
                 s = item['h0']
@@ -466,8 +467,10 @@ def getUltraSrtFcst(nx, ny):
                 # 기온
                 if item['category'] == 'T1H':
                     yy_tmp = item['fcstValue']
+    x = weather_data['tmp']
 
-    y_tmp, t_tmp = int(yy_tmp), int(weather_data['tmp']) #어제, 오늘 기온
+
+    y_tmp, t_tmp = int(yy_tmp), int(weather_data['tmp']) 
     if t_tmp >= y_tmp:
         w = f'기온이 어제보다 {t_tmp-y_tmp}° 높아요'
     else:
@@ -629,7 +632,7 @@ def seven_days():
     return week_data
 
 
-def weather():
+def weather(request):
 
     #위치좌표를 가져와 위경도 설정
     lat, lng = get_curr_loc()
@@ -667,5 +670,5 @@ def weather():
     # print(week)
   
         
-    #return render(request, "pybo/weather_index.html", {'curr_weather': curr_weather, 'time': time, 'day1': day1, 'day2' : day2, 'day3': day3, 'tmn': tmn, 'tmx': tmx, 'week': week, 'word': word, 'word2': word2})
-weather()
+    return render(request, "pybo/weather_index.html", {'curr_weather': curr_weather, 'time': time, 'day1': day1, 'day2' : day2, 'day3': day3, 'tmn': tmn, 'tmx': tmx, 'week': week, 'word': word, 'word2': word2})
+# weather()
