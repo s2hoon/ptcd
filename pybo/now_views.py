@@ -58,7 +58,7 @@ def set_base_time():
 #역지오코딩을 활용하여 주소를 문자열로 변환하는 함ㅅ
 def reverse_geocoding(latitude, longitude):
     #역지오코딩을 활용하여 주소를 문자열로 변환
-    GOOGLE_API_KEY = 'AIzaSyAOgov4B8S6uESOZ9J-wnav-6_6bcJSyUI'
+    GOOGLE_API_KEY = ''
     gmaps = googlemaps.Client(GOOGLE_API_KEY)
     reverse_geocode_result = gmaps.reverse_geocode((latitude, longitude), language='ko')
     #print(reverse_geocode_result[4]['formatted_address'])
@@ -68,7 +68,7 @@ def reverse_geocoding(latitude, longitude):
 #geolocation으로 현재 위치좌표 가져오는 함수
 def get_curr_loc():
     
-    LOCATION_API_KEY = "AIzaSyAOgov4B8S6uESOZ9J-wnav-6_6bcJSyUI" # 공공데이터 포털에서 생성된 본인의 서비스 키를 복사 / 붙여넣기
+    LOCATION_API_KEY = "" # 공공데이터 포털에서 생성된 본인의 서비스 키를 복사 / 붙여넣기
     url = f'https://www.googleapis.com/geolocation/v1/geolocate?key={LOCATION_API_KEY}'
     data = {
         'considerIp': True,
@@ -142,7 +142,7 @@ def map_to_xy(lat, lng):
 def getVilageFsct(nx, ny):
     url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
 
-    serviceKey = 'K7Y1L9rDTVLkFGhZPl2QeAvG9KUmWK2qQmclmrNffL%2FUQYQipP1%2BCi6HFeFV1kSN6Gi2KJ49tuimf35PFy579A%3D%3D'
+    serviceKey = ''
     serviceKeyDecoded = unquote(serviceKey, 'UTF-8') # 공공데이터 포털에서 제공하는 서비스키는 이미 인코딩된 상태이므로, 디코딩하여 사용해야 함
 
     #현재시간을 구하는 기존 함수를 사용
@@ -300,7 +300,7 @@ def getUltraSrtFcst(nx, ny):
     # 기상청_동네 예보 조회 서비스 api 데이터 url 주소, 초단기이기때문에 getUltraSrtFcst 사용
     url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst"
 
-    serviceKey = "K7Y1L9rDTVLkFGhZPl2QeAvG9KUmWK2qQmclmrNffL%2FUQYQipP1%2BCi6HFeFV1kSN6Gi2KJ49tuimf35PFy579A%3D%3D" # 공공데이터 포털에서 생성된 본인의 서비스 키를 복사 / 붙여넣기
+    serviceKey = "" # 공공데이터 포털에서 생성된 본인의 서비스 키를 복사 / 붙여넣기
     serviceKeyDecoded = unquote(serviceKey, 'UTF-8') # 공공데이터 포털에서 제공하는 서비스키는 이미 인코딩된 상태이므로, 디코딩하여 사용해야 함
 
     #현재시간을 구하는 기존 함수를 사용
@@ -499,7 +499,7 @@ def seven_days():
     #중기육상예보조회 api 호출 
     url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst'
 
-    serviceKey = 'K7Y1L9rDTVLkFGhZPl2QeAvG9KUmWK2qQmclmrNffL%2FUQYQipP1%2BCi6HFeFV1kSN6Gi2KJ49tuimf35PFy579A%3D%3D'
+    serviceKey = ''
     serviceKeyDecoded = unquote(serviceKey, 'UTF-8') # 공공데이터 포털에서 제공하는 서비스키는 이미 인코딩된 상태이므로, 디코딩하여 사용해야 함
 
     #파라미터 설정_오늘
