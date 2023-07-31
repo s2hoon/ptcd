@@ -3,7 +3,7 @@
 import googlemaps
 
 #위치(위, 경도) 가져오는 함수
-GOOGLE_API_KEY = 'AIzaSyAOgov4B8S6uESOZ9J-wnav-6_6bcJSyUI'
+GOOGLE_API_KEY = ''
 gmaps = googlemaps.Client(GOOGLE_API_KEY)
 
 def address_convert(loc):
